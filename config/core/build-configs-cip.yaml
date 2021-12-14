@@ -102,16 +102,23 @@ build_configs:
         build_environment: gcc-10
         architectures:
           arm:
-            <<: *cip_variants_kselftest
+            base_defconfig: 'multi_v7_defconfig'
+            fragments: [kselftest]
             extra_configs:
+              - 'allnoconfig'
               - 'cip://4.19.y-cip/arm/qemu_arm_defconfig'
           arm64:
-            <<: *cip_variants_kselftest
+            fragments: [kselftest, arm64-chromebook]
             extra_configs:
+              - 'allnoconfig'
+              - 'defconfig+arm64-chromebook+kselftest'
               - 'cip://4.19.y-cip/arm64/qemu_arm64_defconfig'
           x86_64:
-            <<: *cip_variants_kselftest
+            base_defconfig: 'x86_64_defconfig'
+            fragments: [kselftest, x86-chromebook]
             extra_configs:
+              - 'allnoconfig'
+              - 'x86_64_defconfig+x86-chromebook+kselftest'
               - 'cip://4.19.y-cip/x86/cip_qemu_defconfig'
 
   cip_4.19-rt:
