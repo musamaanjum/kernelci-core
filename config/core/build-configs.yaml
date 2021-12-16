@@ -291,10 +291,10 @@ build_environments:
         name: 'riscv64'
         cross_compile: 'riscv64-linux-gnu-'
 
-  clang-11:
+  clang-10:
     cc: clang
-    cc_version: 11
-    arch_params: &clang_arch_params
+    cc_version: 10
+    arch_params: &clang_10_arch_params
       arm:
         <<: *arm_params
         name:
@@ -311,11 +311,16 @@ build_environments:
         <<: *x86_64_params
         name:
 
+  clang-11:
+    cc: clang
+    cc_version: 11
+    arch_params: *clang_10_arch_params
+
   clang-12:
     cc: clang
     cc_version: 12
     arch_params: &clang_12_arch_params
-      <<: *clang_arch_params
+      <<: *clang_10_arch_params
       riscv:
         <<: *riscv_params
         name:
@@ -326,8 +331,7 @@ build_environments:
   clang-13:
     cc: clang
     cc_version: 13
-    arch_params:
-      <<: *clang_12_arch_params
+    arch_params: *clang_12_arch_params
 
 # Default config with full build coverage
 build_configs_defaults:
@@ -654,8 +658,13 @@ build_configs:
     branch: 'master'
     variants:
       gcc-10: *default_gcc-10
-      clang-11:
-        build_environment: clang-11
+      # Minimum version
+      clang-10:
+        build_environment: clang-10
+        architectures: *arch_clang_configs
+      # Latest stable release
+      clang-13:
+        build_environment: clang-13
         architectures: *arch_clang_configs
 
   media:
@@ -707,11 +716,6 @@ build_configs:
               - 'multi_v7_defconfig+CONFIG_THUMB2_KERNEL=y'
               - 'allnoconfig'
               - 'allmodconfig'
-
-      # clang-11 is the current minium clang version for -next
-      clang-11:
-        build_environment: clang-11
-        architectures: *arch_clang_configs
 
       # Latest clang release
       clang-13:
